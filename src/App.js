@@ -1,46 +1,32 @@
 import logo from "./logo.svg";
 import "./App.css";
-import DataList from "./components/DataList";
-import AddDataForm from "./components/AddDataForm";
-import EditDataForm from "./components/EditDataForm";
-
+import { Route, Link, BrowserRouter, Switch } from "react-router-dom";
+import SignUpForm from "./components/SignUpForm";
+import LoginForm from "./components/LoginForm";
+import UserList from "./components/UserList";
+import PublicRoute from "./pages/PublicRoute";
+import PrivateRoute from "./pages/PrivateRoute";
 import React, { useState, useEffect } from "react";
+
 function App() {
-  const [editFormId, setEditFormId] = useState(0);
-  const [formView, setFormView] = useState(true);
-  const [updateList, setUpdatedList] = useState(true);
   return (
-    // <div className="App">
-    <React.Fragment>
-      <div className="container">
-        {formView && !editFormId ? (
-          <AddDataForm
-            updateList={updateList}
-            setUpdatedList={setUpdatedList}
-            formView={formView}
-            setFormView={setFormView}
-          />
-        ) : (
-          <EditDataForm
-            updateList={updateList}
-            setUpdatedList={setUpdatedList}
-            editFormId={editFormId}
-            setEditFormId={setEditFormId}
-            formView={formView}
-            setFormView={setFormView}
-          />
-        )}
-      </div>
-      <DataList
-        updateList={updateList}
-        setUpdatedList={setUpdatedList}
-        editFormId={editFormId}
-        setEditFormId={setEditFormId}
-        formView={formView}
-        setFormView={setFormView}
-      />
-    </React.Fragment>
-    // </div>
+    <BrowserRouter>
+      <Switch>
+        <PublicRoute restricted={false} component={LoginForm} path="/" exact />
+        <PublicRoute
+          restricted={false}
+          component={SignUpForm}
+          path="/signup"
+          exact
+        />
+        <PrivateRoute
+          restricted={true}
+          component={UserList}
+          path="/dashboard"
+          exact
+        />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
